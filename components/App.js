@@ -11,7 +11,6 @@ export function Content({ champions }) {
     const draftRotation = useRef(0)
     // current draft selection picks and bans based on order pick
     const draftSelection = useRef(["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""])
-    console.log(draftSelection)
 
     // state used to rerender draft components when a reset in draft happens
     const [state, setState] = useState(0)

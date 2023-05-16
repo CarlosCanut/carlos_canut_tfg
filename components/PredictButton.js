@@ -12,7 +12,6 @@ export function PredictButton () {
             }
         });
         const data = await res.json();
-        console.log(data);
     };
     
 
