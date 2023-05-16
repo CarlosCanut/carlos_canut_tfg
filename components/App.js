@@ -1,13 +1,17 @@
 import Image from "next/image"
 import { useRef, useState } from "react"
 import { Dropdown } from "./Dropdown";
-import { DraftCard } from "./DraftCard";  
+import { DraftCard } from "./DraftCard";
+import { RefreshIcon } from '@heroicons/react/outline';
+import classNames from 'classnames';
+import { PredictButton } from "./PredictButton";
 
 export function Content({ champions }) {
     // current draft rotation index
     const draftRotation = useRef(0)
     // current draft selection picks and bans based on order pick
     const draftSelection = useRef(["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""])
+    console.log(draftSelection)
 
     // state used to rerender draft components when a reset in draft happens
     const [state, setState] = useState(0)
@@ -60,7 +64,7 @@ export function Content({ champions }) {
                             onOptionChange={handlePatchChange}
                             options={[{value: '', tag: 'patch'},{value: '10.12', tag: '10.12'},{value: '10.13', tag: '10.13'}]}
                         />
-                        <Dropdown
+                        {/* <Dropdown
                             selectedOption={role}
                             onOptionChange={handleRoleChange}
                             options={[{value: '', tag: 'role'},
@@ -69,7 +73,7 @@ export function Content({ champions }) {
                             {value: 'mid', tag: 'mid'},
                             {value: 'adc', tag: 'adc'},
                             {value: 'support', tag: 'support'}]}
-                        />
+                        /> */}
                     </div>
                 </div>
 
@@ -132,8 +136,18 @@ export function Content({ champions }) {
                         onChange={((event) => {setSearchChampion(event.target.value)})}
                     />
                     <button onClick={handleChampionSelection} className='w-32 flex justify-center items-center bg-green-600 drop-shadow-xl hover:bg-opacity-50 active:bg-opacity-30 bg-opacity-70 text-sm'>Select</button>
-                    <button onClick={() => {console.log("Predict")}} className='w-32 flex justify-center items-center bg-yellow-400 drop-shadow-xl hover:bg-opacity-50 active:bg-opacity-30 bg-opacity-70 text-sm mr-auto'>Predict</button>
-                    <button onClick={handleDraftReset} className='w-8 flex justify-center items-center bg-yellow-400 drop-shadow-xl hover:bg-opacity-50 active:bg-opacity-30 bg-opacity-70 text-sm ml-auto'></button>
+                    {/* <button onClick={() => {console.log("Predict")}} className='w-32 flex justify-center items-center bg-yellow-400 drop-shadow-xl hover:bg-opacity-50 active:bg-opacity-30 bg-opacity-70 text-sm mr-auto'>Predict</button> */}
+                    <PredictButton />
+                    <button
+                        className={classNames(
+                        'ml-auto mr-6 p-2  hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300',
+                        'transition-colors duration-200 ease-in-out',
+                        'text-gray-500 hover:text-gray-700 focus:ring-opacity-50'
+                        )}
+                        onClick={handleDraftReset}
+                    >
+                        <RefreshIcon className="h-5 w-5" />
+                    </button>
                     </div>
                     <div className='flex flex-wrap gap-2'>
                         <button key={-1} value={-1} onFocus={(event) => {setChampionSelected(event.target.value)}} className='relative w-8 h-8 bg-[#2E2E2E] drop-shadow-xl focus:border-2 '>

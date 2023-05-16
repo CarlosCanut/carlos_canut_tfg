@@ -54,12 +54,12 @@ export default function Home({ champions }) {
       </Head>
       <main className="flex justify-center items-center min-h-screen bg-gradient-to-br from-black to-transparent">
         <Suspense fallback={<></>}>
-        <div
-          className={`opening-animation ${isLoading ? '' : 'loaded'}`}
-          style={{ transition: 'opacity 0.5s ease-in-out' }}
-        >
-          <Content champions={champions} />
-        </div>
+          <div
+            className={`opening-animation ${isLoading ? '' : 'loaded'}`}
+            style={{ transition: 'opacity 0.5s ease-in-out' }}
+          >
+            <Content champions={champions} />
+          </div>
         </Suspense>
       </main>
     </>
