@@ -147,7 +147,7 @@ export function Content({ champions }) {
                                 align='center'
                             />
                         </button>
-                        {champions.map((champion) => (
+                        {champions.filter((champ) => champ.name.toLowerCase().includes(searchChampion.toLowerCase())).map((champion) => (
                             <button key={champion.id} value={champion.id} onFocus={(event) => {setChampionSelected(event.target.value)}} className='relative w-8 h-8 bg-[#2E2E2E] drop-shadow-xl focus:border-2 '>
                                 <Image
                                     src={
