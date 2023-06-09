@@ -23,17 +23,31 @@ export const getStaticProps = async() => {
     })
     .catch(error => console.error(error));
 
+
+  const clusters = await fetch("https://loldrafts.azurewebsites.net/api/GetClusters?code=YJs1p4ueqy8GQmY2Z91yApSBbztlUOAZWB3Nswe_g8H5AzFuaSyhcw==")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Error HTTP: " + response.status)
+      }
+      return response.json()
+    })
+    .catch(error => console.error(error))
+  
+
   return {
     props:{
-        champions: champions
+        champions: champions,
+        clusters: clusters,
+        // champions_by_role: champions_by_role
     }
   }
 }
 
-export default function Home({ champions }) {
+export default function Home({ champions, clusters }) {
   // Define a state variable to keep track of the loading state
   const [isLoading, setIsLoading] = useState(true)
-
+  const [championsByRole, setChampionsByRole] = useState(new Map());
+  
   useEffect(() => {
     // Simulate a delay of 2 seconds to show the loading animation
     const timer = setTimeout(() => {
@@ -42,6 +56,17 @@ export default function Home({ champions }) {
 
     // Clear the timer when the component unmounts
     return () => clearTimeout(timer)
+  }, [])
+
+  useEffect(() => {
+    var champions_by_role = new Map();
+
+    const roles = ['general', 'top', 'jungle', 'mid', 'bottom', 'utility']
+    roles.forEach((role) => {
+      const roleArray = clusters.filter((item) => item.role === role).map((item) => item.championId)
+      champions_by_role.set(role, roleArray)
+    })
+    setChampionsByRole(champions_by_role)
   }, [])
 
   return (
@@ -58,7 +83,7 @@ export default function Home({ champions }) {
             className={`opening-animation ${isLoading ? '' : 'loaded'}`}
             style={{ transition: 'opacity 0.5s ease-in-out' }}
           >
-            <Content champions={champions} />
+            <Content champions={champions} championsByRole={championsByRole} />
           </div>
         </Suspense>
       </main>
