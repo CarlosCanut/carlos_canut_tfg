@@ -3,7 +3,7 @@ import Image from "next/image"
 import { PredictButton } from "./PredictButton";
 import { RefreshIcon } from '@heroicons/react/outline';
 import classNames from 'classnames';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function PickSelection({ 
     champions, 
@@ -15,6 +15,9 @@ export function PickSelection({
     draftRotation,
     handleSelectedRole,
     championsByRole,
+    handlePrediction,
+    clusterDictionary,
+    recommendation,
 }) {
 
     function ChampionsGrid ({ role }) {
@@ -60,6 +63,42 @@ export function PickSelection({
         )
     }
 
+    const [recommendedGroup, setRecommendedGroup] = useState([])
+    
+    useEffect(() => {
+        if (recommendation.recommendation[0] != "") {
+            var recommendationRole = ""
+            switch (recommendation.recommendation[0]) {
+                case 'Top':
+                    recommendationRole = "top"
+                    break;
+                case 'Jungle':
+                    recommendationRole = "jungle"
+                    break;
+                case 'Mid':
+                    recommendationRole = "mid"
+                    break;
+                case 'Adc':
+                    recommendationRole = "bottom"
+                    break;
+                case 'Support':
+                    recommendationRole = "utility"
+                    break;
+                default:
+                    recommendationRole = "general"
+                    break;
+            }
+
+            var cluster_translation = clusterDictionary.get(recommendationRole)
+            var recommended_group = []
+            cluster_translation.filter(item => Object.values(item)[0] === parseInt(recommendation.recommendation[1])).map((item) => {
+                recommended_group.push(Object.keys(item)[0])
+            })
+            setRecommendedGroup(recommended_group)
+        }
+
+    }, [recommendation])
+
     const tabItems = [
         { title: "General", value: "general", content: <ChampionsGrid role={"general"} />},
         { title: "Top", value: "top", content: <ChampionsGrid role={"top"} />},
@@ -89,7 +128,7 @@ export function PickSelection({
                 />
                 <button disabled={draftRotation.current == 10 ? true : false} onClick={handleChampionSelection} className={`w-32 flex justify-center items-center ${draftRotation.current == 10 ? 'bg-opacity-40' : 'hover:bg-opacity-50 active:bg-opacity-30'} bg-green-600 drop-shadow-xl  bg-opacity-70 text-sm`}>Select</button>
                 {/* <button onClick={() => {console.log("Predict")}} className='w-32 flex justify-center items-center bg-yellow-400 drop-shadow-xl hover:bg-opacity-50 active:bg-opacity-30 bg-opacity-70 text-sm mr-auto'>Predict</button> */}
-                <PredictButton />
+                <PredictButton handlePrediction={handlePrediction} />
                 <button
                     className={classNames(
                     'ml-auto mr-6 p-2  hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300',
@@ -100,6 +139,26 @@ export function PickSelection({
                 >
                     <RefreshIcon className="h-5 w-5" />
                 </button>
+            </div>
+            <div>
+                <div>{recommendation.recommendation[0]}</div>
+                {recommendedGroup.map((champion) => {
+                    return (
+                        <button key={champion} value={champion} onFocus={handleHoldChampionSelection} className='relative w-8 h-8 bg-[#2E2E2E] drop-shadow-xl focus:border-2 '>
+                            <Image
+                                src={
+                                    "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/" +
+                                    champion +
+                                    ".png"
+                                }
+                                alt={champion}
+                                width={100}
+                                height={100}
+                                align='center'
+                            />
+                        </button>
+                    )
+                })}
             </div>
             <div className='flex flex-row'>
                 {tabItems.map((item, index) => (

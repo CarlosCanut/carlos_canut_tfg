@@ -47,6 +47,7 @@ export default function Home({ champions, clusters }) {
   // Define a state variable to keep track of the loading state
   const [isLoading, setIsLoading] = useState(true)
   const [championsByRole, setChampionsByRole] = useState(new Map());
+  const [clusterDictionary, setClusterDictionary] = useState(new Map());
   
   useEffect(() => {
     // Simulate a delay of 2 seconds to show the loading animation
@@ -60,13 +61,17 @@ export default function Home({ champions, clusters }) {
 
   useEffect(() => {
     var champions_by_role = new Map();
+    var cluster_dictionary = new Map();
 
     const roles = ['general', 'top', 'jungle', 'mid', 'bottom', 'utility']
     roles.forEach((role) => {
       const roleArray = clusters.filter((item) => item.role === role).map((item) => item.championId)
+      const clusterMap = clusters.filter((item) => item.role === role).map((item) => ({ [item.championId]: item.cluster }))
       champions_by_role.set(role, roleArray)
+      cluster_dictionary.set(role, clusterMap)
     })
     setChampionsByRole(champions_by_role)
+    setClusterDictionary(cluster_dictionary)
   }, [])
 
   return (
@@ -83,7 +88,7 @@ export default function Home({ champions, clusters }) {
             className={`opening-animation ${isLoading ? '' : 'loaded'}`}
             style={{ transition: 'opacity 0.5s ease-in-out' }}
           >
-            <Content champions={champions} championsByRole={championsByRole} />
+            <Content champions={champions} championsByRole={championsByRole} clusterDictionary={clusterDictionary} />
           </div>
         </Suspense>
       </main>

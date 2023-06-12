@@ -1,20 +1,4 @@
-export function PredictButton () {
-    const draft = {
-        hello: "world"
-    }
-
-    const handlePrediction = async () => {
-        const res = await fetch('/api/predict', {
-            method: 'POST',
-            body: JSON.stringify({ draft }),
-            headers: {
-            'Content-Type': 'application/json'
-            }
-        });
-        const data = await res.json();
-    };
-    
-
+export function PredictButton ({ handlePrediction }) {
     return (
         <button 
             onClick={handlePrediction} 

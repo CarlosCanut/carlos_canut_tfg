@@ -7,7 +7,9 @@ import Image from "next/image";
 import { BanCard } from "./BanCard";
 import { SelectRole } from "./SelectRole";
 
-export function Content({ champions, championsByRole }) {
+export function Content({ champions, championsByRole, clusterDictionary }) {
+    // current recommendation
+    const [recommendation, setRecommendation] = useState({"recommendation": ["", 0]})
     // current draft rotation index
     const draftRotation = useRef(0)
     // current draft selection picks and bans based on order pick
@@ -47,7 +49,7 @@ export function Content({ champions, championsByRole }) {
     }
     const handleDraftReset = () => {
         draftRotation.current = 0
-        draftSelection.current = [{"champion": "", "role": ""}, {"champion": "", "role": ""}, {"champion": "", "role": ""}, {"champion": "", "role": ""}, {"champion": "", "role": ""}, {"champion": "", "role": ""}, {"champion": "", "role": ""}, {"champion": "", "role": ""}, {"champion": "", "role": ""}, {"champion": "", "role": ""}]
+        draftSelection.current = [{"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}]
         setChampionSelected("")
         setSearchChampion("")
         setState(state + 1)
@@ -57,6 +59,41 @@ export function Content({ champions, championsByRole }) {
     };
     const handleRoleChange = (event) => {
         setPatch(event.target.value);
+    };
+
+
+    const handlePrediction = async () => {
+        
+        setRecommendation({"recommendation": ["", 0]})
+        {draftSelection.current.reduce( (acc, pick) => {
+            if (pick.champion == "") {
+                return acc
+            }
+            var cluster_translation = clusterDictionary.get(pick.role)
+            cluster_translation.map((item) => {
+                const [key, value] = Object.entries(item)[0];
+                if (key == pick.champion) {
+                    pick.cluster = value
+                }
+            })
+            acc.push(pick)
+            return acc
+        }, [])}
+        
+        const draft = {
+            "draftSelection": draftSelection.current,
+            "draftRotation": draftRotation.current
+        }
+
+        const res = await fetch('/api/predict', {
+            method: 'POST',
+            body: JSON.stringify(draft),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await res.json();
+        setRecommendation(data)
     };
     /////////////////
 
@@ -165,6 +202,9 @@ export function Content({ champions, championsByRole }) {
                         draftRotation={draftRotation}
                         handleSelectedRole={handleSelectedRole}
                         championsByRole={championsByRole}
+                        handlePrediction={handlePrediction}
+                        clusterDictionary={clusterDictionary}
+                        recommendation={recommendation}
                     />
                     <div className='w-full h-full flex flex-col items-start justify-start gap-2 pl-4'>
                         <div className='flex '>
