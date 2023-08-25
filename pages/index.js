@@ -24,7 +24,7 @@ export const getStaticProps = async() => {
     .catch(error => console.error(error));
 
 
-  const clusters = await fetch("https://loldrafts.azurewebsites.net/api/GetClusters?code=YJs1p4ueqy8GQmY2Z91yApSBbztlUOAZWB3Nswe_g8H5AzFuaSyhcw==")
+  const clusters = await fetch("https://getdraftrecommendations.azurewebsites.net/api/GetClusters?code=NiEz1Xsfk8Aaqr9heGQBDH1pYHat-wM8Y25WU612EtDKAzFu2IfvtQ==")
     .then((response) => {
       if (!response.ok) {
         throw new Error("Error HTTP: " + response.status)
@@ -63,7 +63,7 @@ export default function Home({ champions, clusters }) {
     var champions_by_role = new Map();
     var cluster_dictionary = new Map();
 
-    const roles = ['general', 'top', 'jungle', 'mid', 'bottom', 'utility']
+    const roles = ['top', 'jungle', 'mid', 'bottom', 'utility']
     roles.forEach((role) => {
       const roleArray = clusters.filter((item) => item.role === role).map((item) => item.championId)
       const clusterMap = clusters.filter((item) => item.role === role).map((item) => ({ [item.championId]: item.cluster }))

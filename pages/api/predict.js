@@ -5,7 +5,7 @@ export default async function handler(req, res) {
       // Handle POST request
       var draftSelection = req.body
       
-      const prediction = await fetch('https://loldrafts.azurewebsites.net/api/GetRecommendation?code=vfynHemzgvugvz7ceQhqVFrVKxgWlgfHsgiqd3bkaJK7AzFuiVfv1Q==', {
+      const prediction = await fetch('https://getdraftrecommendations.azurewebsites.net/api/GetRecommendation?code=_xa3LE2hVxa8xQcr-5B0UfdS35_pvXmtH41RXfnJ-xCvAzFuTev1Ww==', {
           method: 'POST',
           body: JSON.stringify(draftSelection),
           headers: {

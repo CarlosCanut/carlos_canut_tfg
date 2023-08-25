@@ -13,8 +13,8 @@ export function Content({ champions, championsByRole, clusterDictionary }) {
     // current draft rotation index
     const draftRotation = useRef(0)
     // current draft selection picks and bans based on order pick
-    const draftSelection = useRef([{"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}])
-    const [selectedRole, setSelectedRole] = useState("general")
+    const draftSelection = useRef([{"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}])
+    const [selectedRole, setSelectedRole] = useState("top")
 
     // state used to rerender draft components when a reset in draft happens
     const [state, setState] = useState(0)
@@ -49,7 +49,7 @@ export function Content({ champions, championsByRole, clusterDictionary }) {
     }
     const handleDraftReset = () => {
         draftRotation.current = 0
-        draftSelection.current = [{"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}, {"champion": "", "role": "unselected"}]
+        draftSelection.current = [{"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}]
         setChampionSelected("")
         setSearchChampion("")
         setState(state + 1)
@@ -70,6 +70,7 @@ export function Content({ champions, championsByRole, clusterDictionary }) {
                 return acc
             }
             var cluster_translation = clusterDictionary.get(pick.role)
+
             cluster_translation.map((item) => {
                 const [key, value] = Object.entries(item)[0];
                 if (key == pick.champion) {
@@ -82,8 +83,9 @@ export function Content({ champions, championsByRole, clusterDictionary }) {
         
         const draft = {
             "draftSelection": draftSelection.current,
-            "draftRotation": draftRotation.current
+            "draftRotation": (draftRotation.current + 1)
         }
+        console.log(draft)
 
         const res = await fetch('/api/predict', {
             method: 'POST',
@@ -93,6 +95,8 @@ export function Content({ champions, championsByRole, clusterDictionary }) {
             }
         });
         const data = await res.json();
+        console.log(data)
+        
         setRecommendation(data)
     };
     /////////////////

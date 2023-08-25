@@ -67,27 +67,24 @@ export function PickSelection({
     
     useEffect(() => {
         if (recommendation.recommendation[0] != "") {
-            var recommendationRole = ""
-            switch (recommendation.recommendation[0]) {
-                case 'Top':
-                    recommendationRole = "top"
-                    break;
-                case 'Jungle':
-                    recommendationRole = "jungle"
-                    break;
-                case 'Mid':
-                    recommendationRole = "mid"
-                    break;
-                case 'Adc':
-                    recommendationRole = "bottom"
-                    break;
-                case 'Support':
-                    recommendationRole = "utility"
-                    break;
-                default:
-                    recommendationRole = "general"
-                    break;
-            }
+            var recommendationRole = recommendation.recommendation[0]
+            // switch (recommendation.recommendation[0]) {
+            //     case 'Top':
+            //         recommendationRole = "top"
+            //         break;
+            //     case 'Jungle':
+            //         recommendationRole = "jungle"
+            //         break;
+            //     case 'Mid':
+            //         recommendationRole = "mid"
+            //         break;
+            //     case 'Adc':
+            //         recommendationRole = "bottom"
+            //         break;
+            //     case 'Support':
+            //         recommendationRole = "utility"
+            //         break;
+            // }
 
             var cluster_translation = clusterDictionary.get(recommendationRole)
             var recommended_group = []
@@ -100,7 +97,6 @@ export function PickSelection({
     }, [recommendation])
 
     const tabItems = [
-        { title: "General", value: "general", content: <ChampionsGrid role={"general"} />},
         { title: "Top", value: "top", content: <ChampionsGrid role={"top"} />},
         { title: "Jungle", value: "jungle", content: <ChampionsGrid role={"jungle"} /> },
         { title: "Mid", value: "mid", content: <ChampionsGrid role={"mid"} /> },
