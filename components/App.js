@@ -113,7 +113,7 @@ export function Content({ champions, championsByRole, clusterDictionary }) {
                         <Dropdown
                             selectedOption={patch}
                             onOptionChange={handlePatchChange}
-                            options={[{value: '', tag: 'patch'},{value: '10.12', tag: '10.12'},{value: '10.13', tag: '10.13'}]}
+                            options={[{value: '', tag: 'patch'},{value: '13.10', tag: '13.10'}]}
                         />
                         {/* <Dropdown
                             selectedOption={role}
