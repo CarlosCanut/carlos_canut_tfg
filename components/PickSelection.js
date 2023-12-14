@@ -20,6 +20,7 @@ export function PickSelection({
     recommendation,
 }) {
 
+    // component for creating a champion card for each pick
     function ChampionsGrid ({ role }) {
         const championsArray = championsByRole.get(role)
         return (
@@ -68,24 +69,6 @@ export function PickSelection({
     useEffect(() => {
         if (recommendation.recommendation[0] != "") {
             var recommendationRole = recommendation.recommendation[0]
-            // switch (recommendation.recommendation[0]) {
-            //     case 'Top':
-            //         recommendationRole = "top"
-            //         break;
-            //     case 'Jungle':
-            //         recommendationRole = "jungle"
-            //         break;
-            //     case 'Mid':
-            //         recommendationRole = "mid"
-            //         break;
-            //     case 'Adc':
-            //         recommendationRole = "bottom"
-            //         break;
-            //     case 'Support':
-            //         recommendationRole = "utility"
-            //         break;
-            // }
-
             var cluster_translation = clusterDictionary.get(recommendationRole)
             var recommended_group = []
             cluster_translation.filter(item => Object.values(item)[0] === parseInt(recommendation.recommendation[1])).map((item) => {
@@ -123,7 +106,6 @@ export function PickSelection({
                     onChange={handleSearchChampion}
                 />
                 <button disabled={draftRotation.current == 10 ? true : false} onClick={handleChampionSelection} className={`w-32 flex justify-center items-center ${draftRotation.current == 10 ? 'bg-opacity-40' : 'hover:bg-opacity-50 active:bg-opacity-30'} bg-green-600 drop-shadow-xl  bg-opacity-70 text-sm`}>Select</button>
-                {/* <button onClick={() => {console.log("Predict")}} className='w-32 flex justify-center items-center bg-yellow-400 drop-shadow-xl hover:bg-opacity-50 active:bg-opacity-30 bg-opacity-70 text-sm mr-auto'>Predict</button> */}
                 <PredictButton handlePrediction={handlePrediction} />
                 <button
                     className={classNames(

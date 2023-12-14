@@ -8,26 +8,27 @@ import { BanCard } from "./BanCard";
 import { SelectRole } from "./SelectRole";
 
 export function Content({ champions, championsByRole, clusterDictionary }) {
-    // current recommendation
+    // State for the current recommendation
     const [recommendation, setRecommendation] = useState({"recommendation": ["", 0]})
-    // current draft rotation index
+    // Ref for the current draft rotation index
     const draftRotation = useRef(0)
-    // current draft selection picks and bans based on order pick
+    // Ref for the current draft selection picks and bans based on order pick
     const draftSelection = useRef([{"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}])
+    // State for the currently selected role
     const [selectedRole, setSelectedRole] = useState("top")
 
-    // state used to rerender draft components when a reset in draft happens
+    // State used to rerender draft components when a reset in draft happens
     const [state, setState] = useState(0)
 
-    // input of the search text field
+    // State for the search text field input
     const [searchChampion, setSearchChampion] = useState("")
-    // current champion selection
+    // State for the current champion selection
     const [championSelected, setChampionSelected] = useState("")
 
-    // patch filter
+    // State for the patch filter
     const [patch, setPatch] = useState('');
 
-    /////////////////
+    // Handler for champion selection
     const handleChampionSelection = () => {
         if (championSelected != "") {
             draftSelection.current[draftRotation.current] = {"champion": championSelected, "role": selectedRole}
@@ -36,17 +37,22 @@ export function Content({ champions, championsByRole, clusterDictionary }) {
         }
     }
 
+    // Handler for role selection
     const handleSelectedRole = (role) => {
         setSelectedRole(role.value)
     }
     
+    // Handler for champio selection on hold
     const handleHoldChampionSelection = (event) => {
         setChampionSelected(event.target.value)
     }
     
+    // Handler for the search input
     const handleSearchChampion = (event) => {
         setSearchChampion(event.target.value)
     }
+
+    // Handler for draft simulation reset
     const handleDraftReset = () => {
         draftRotation.current = 0
         draftSelection.current = [{"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}, {"champion": "", "role": "unselected", "cluster": 0}]
@@ -54,14 +60,14 @@ export function Content({ champions, championsByRole, clusterDictionary }) {
         setSearchChampion("")
         setState(state + 1)
     }
+
+    // Handler for patch selection
     const handlePatchChange = (event) => {
         setPatch(event.target.value);
     };
-    const handleRoleChange = (event) => {
-        setPatch(event.target.value);
-    };
 
 
+    // Handler for creating a recommendation
     const handlePrediction = async () => {
         
         setRecommendation({"recommendation": ["", 0]})
@@ -85,7 +91,6 @@ export function Content({ champions, championsByRole, clusterDictionary }) {
             "draftSelection": draftSelection.current,
             "draftRotation": (draftRotation.current + 1)
         }
-        console.log(draft)
 
         const res = await fetch('/api/predict', {
             method: 'POST',
@@ -95,11 +100,9 @@ export function Content({ champions, championsByRole, clusterDictionary }) {
             }
         });
         const data = await res.json();
-        console.log(data)
         
         setRecommendation(data)
     };
-    /////////////////
 
     return (
         <div className='flex justify-center items-center h-screen'>
@@ -115,16 +118,6 @@ export function Content({ champions, championsByRole, clusterDictionary }) {
                             onOptionChange={handlePatchChange}
                             options={[{value: '', tag: 'patch'},{value: '13.10', tag: '13.10'}]}
                         />
-                        {/* <Dropdown
-                            selectedOption={role}
-                            onOptionChange={handleRoleChange}
-                            options={[{value: '', tag: 'role'},
-                            {value: 'top', tag: 'top'},
-                            {value: 'jungle', tag: 'jungle'},
-                            {value: 'mid', tag: 'mid'},
-                            {value: 'adc', tag: 'adc'},
-                            {value: 'support', tag: 'support'}]}
-                        /> */}
                     </div>
                 </div>
 
@@ -141,13 +134,6 @@ export function Content({ champions, championsByRole, clusterDictionary }) {
                         <BanCard />
                         <BanCard />                    
                     </div>
-                    {/* <div className='w-full h-full flex flex-col items-center justify-end gap-2'>
-                        <DraftCard dimensions={'w-12 h-12'} rotation={draftRotation.current} index={6} champLocked={draftSelection.current[6]} champSelected={championSelected} />                        
-                        <DraftCard dimensions={'w-12 h-12'} rotation={draftRotation.current} index={9} champLocked={draftSelection.current[9]} champSelected={championSelected} />                        
-                        <DraftCard dimensions={'w-12 h-12'} rotation={draftRotation.current} index={10} champLocked={draftSelection.current[10]} champSelected={championSelected} />                        
-                        <DraftCard dimensions={'w-12 h-12'} rotation={draftRotation.current} index={17} champLocked={draftSelection.current[17]} champSelected={championSelected} />                        
-                        <DraftCard dimensions={'w-12 h-12'} rotation={draftRotation.current} index={18} champLocked={draftSelection.current[18]} champSelected={championSelected} />                        
-                    </div> */}
                     </div>
 
                     <div className='w-[10%] flex justify-center items-center text-3xl py-4'>VS</div>
@@ -163,13 +149,6 @@ export function Content({ champions, championsByRole, clusterDictionary }) {
                         <BanCard />
                         <BanCard />
                     </div>
-                    {/* <div className='w-full h-full flex items-center justify-start gap-2'>
-                        <DraftCard dimensions={'w-12 h-12'} rotation={draftRotation.current} index={7} champLocked={draftSelection.current[7]} champSelected={championSelected} />                        
-                        <DraftCard dimensions={'w-12 h-12'} rotation={draftRotation.current} index={8} champLocked={draftSelection.current[8]} champSelected={championSelected} />                        
-                        <DraftCard dimensions={'w-12 h-12'} rotation={draftRotation.current} index={11} champLocked={draftSelection.current[11]} champSelected={championSelected} />                        
-                        <DraftCard dimensions={'w-12 h-12'} rotation={draftRotation.current} index={16} champLocked={draftSelection.current[16]} champSelected={championSelected} />                        
-                        <DraftCard dimensions={'w-12 h-12'} rotation={draftRotation.current} index={19} champLocked={draftSelection.current[19]} champSelected={championSelected} />                        
-                    </div> */}
                     </div>
                 </div>
                 <div className='flex'>

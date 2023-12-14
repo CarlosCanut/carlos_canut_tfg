@@ -23,7 +23,7 @@ export const getStaticProps = async() => {
     })
     .catch(error => console.error(error));
 
-
+  // get clusters defined by the recommendation system
   const clusters = await fetch("https://getdraftrecommendations.azurewebsites.net/api/GetClusters?code=NiEz1Xsfk8Aaqr9heGQBDH1pYHat-wM8Y25WU612EtDKAzFu2IfvtQ==")
     .then((response) => {
       if (!response.ok) {
@@ -38,19 +38,20 @@ export const getStaticProps = async() => {
     props:{
         champions: champions,
         clusters: clusters,
-        // champions_by_role: champions_by_role
     }
   }
 }
 
 export default function Home({ champions, clusters }) {
-  // Define a state variable to keep track of the loading state
+  // State to track the loading state
   const [isLoading, setIsLoading] = useState(true)
+  // State for champions grouped by role
   const [championsByRole, setChampionsByRole] = useState(new Map());
+  // State for the cluster dictionary to identify each cluster
   const [clusterDictionary, setClusterDictionary] = useState(new Map());
   
+  // Simulate a delay of 2 seconds to show the loading animation
   useEffect(() => {
-    // Simulate a delay of 2 seconds to show the loading animation
     const timer = setTimeout(() => {
       setIsLoading(false)
     }, 2000)
@@ -59,6 +60,7 @@ export default function Home({ champions, clusters }) {
     return () => clearTimeout(timer)
   }, [])
 
+  // Process champions and clusters to populate championsByRole and clusterDictionary
   useEffect(() => {
     var champions_by_role = new Map();
     var cluster_dictionary = new Map();
