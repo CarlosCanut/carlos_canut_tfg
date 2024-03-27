@@ -100,7 +100,7 @@ export default function Home({ champions, clusters }) {
                     <p>LANING <br />PHASE</p>
                   </div>
                 </div>
-                <div className='cursor-pointer' onClick={() => window.open("https://www.carloscanut.me/projects/lolpicks", '_blank').focus()}>
+                <div className='cursor-pointer' onClick={() => window.open("https://www.carloscanut.me/projects/laning_phase", '_blank').focus()}>
                   ABOUT
                 </div>
               </header>
