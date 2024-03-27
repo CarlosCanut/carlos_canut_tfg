@@ -79,8 +79,8 @@ export default function Draft_recommender({ champions, clusters }) {
   return (
     <>
       <Head>
-        <title>Carlos Canut TFG</title>
-        <meta name="description" content="Carlos Canut Final Project" />
+        <title>Laning Phase</title>
+        <meta name="description" content="Laning Phase" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
