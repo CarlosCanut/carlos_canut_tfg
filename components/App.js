@@ -6,8 +6,11 @@ import { PickSelection } from "./PickSelection";
 import Image from "next/image";
 import { BanCard } from "./BanCard";
 import { SelectRole } from "./SelectRole";
+import { TbArrowBack } from "react-icons/tb";
+import { useRouter } from "next/router";
 
 export function Content({ champions, championsByRole, clusterDictionary }) {
+    const router = useRouter()
     // State for the current recommendation
     const [recommendation, setRecommendation] = useState({"recommendation": ["", 0]})
     // Ref for the current draft rotation index
@@ -111,14 +114,18 @@ export function Content({ champions, championsByRole, clusterDictionary }) {
                 <div className='w-full h-full flex flex-col justify-center items-center'>
                 {/* Simulation section */}
                 <div className='w-full h-24 flex flex-col items-start justify-center'>
-                    <h2 className='text-2xl ml-2'>Prediction preference</h2>
+                    <div className="flex flex-row justify-start items-center gap-2 cursor-pointer text-xl" onClick={() => router.push("/")}>
+                        <TbArrowBack color="text" />
+                        <p>Go back</p>
+                    </div>
+                    {/* <h2 className='text-2xl ml-2'>Prediction preference</h2>
                     <div className='flex flex-row gap-2'>
                         <Dropdown
                             selectedOption={patch}
                             onOptionChange={handlePatchChange}
                             options={[{value: '', tag: 'patch'},{value: '13.10', tag: '13.10'}]}
                         />
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* Draft Section */}

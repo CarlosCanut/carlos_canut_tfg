@@ -1,10 +1,8 @@
 import { Content } from '@/components/App'
-import ProjectCard from '@/components/ProjectCard';
 import Head from 'next/head'
-import Image from 'next/image';
 import { Suspense, useEffect, useState } from 'react'
 
-export const getStaticProps = async () => {
+export const getStaticProps = async() => {
   // get last league of legends patch
   const last_patch = await fetch('https://ddragon.leagueoflegends.com/api/versions.json')
     .then(response => response.json())
@@ -18,7 +16,7 @@ export const getStaticProps = async () => {
       let counter = 0;
       let champions = [];
       for (const champ in all_champions["data"]) {
-        champions.push({ name: all_champions["data"][champ]["id"], id: all_champions["data"][champ]["key"] });
+        champions.push({name: all_champions["data"][champ]["id"], id: all_champions["data"][champ]["key"]});
         counter += 1;
       }
       return champions
@@ -34,24 +32,24 @@ export const getStaticProps = async () => {
       return response.json()
     })
     .catch(error => console.error(error))
-
+  
 
   return {
-    props: {
-      champions: champions,
-      clusters: clusters,
+    props:{
+        champions: champions,
+        clusters: clusters,
     }
   }
 }
 
-export default function Home({ champions, clusters }) {
+export default function Draft_recommender({ champions, clusters }) {
   // State to track the loading state
   const [isLoading, setIsLoading] = useState(true)
   // State for champions grouped by role
   const [championsByRole, setChampionsByRole] = useState(new Map());
   // State for the cluster dictionary to identify each cluster
   const [clusterDictionary, setClusterDictionary] = useState(new Map());
-
+  
   // Simulate a delay of 2 seconds to show the loading animation
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -92,30 +90,7 @@ export default function Home({ champions, clusters }) {
             className={`opening-animation ${isLoading ? '' : 'loaded'}`}
             style={{ transition: 'opacity 0.5s ease-in-out' }}
           >
-            <div className='flex justify-center items-center h-screen w-screen'>
-              <header className='absolute top-[5dvh] w-full h-[5dvh] flex flex-row justify-center items-center tracking-widest px-[10dvw] font-semibold'>
-                <div className='mr-auto'>
-                  <div className='flex flex-row gap-4 items-center justify-start'>
-                    <Image src='/landing_phase_dark_icon.svg' className='filter-text' alt={'landing_phase_icon'} width={70} height={70} />
-                    <p>LANING <br />PHASE</p>
-                  </div>
-                </div>
-                <div className='cursor-pointer' onClick={() => window.open("https://www.carloscanut.me/projects/lolpicks", '_blank').focus()}>
-                  ABOUT
-                </div>
-              </header>
-              <section className='w-full h-[90dvh] mt-[20dvh] flex flex-col'>
-                <div className='w-full h-[20dvh] border-b-2 border-b-text flex items-end justify-start'>
-                  <h1 className='text-4xl font-bold text-text ml-[10dvw] mb-4'>
-                    LEAGUE OF LEGENDS MADE SIMPLE
-                  </h1>
-                </div>
-                <div className='w-full h-[60dvh] flex flex-wrap justify-start items-start gap-4 my-24 mx-[10dvw]'>
-                  <ProjectCard title="Draft Recommender" type="Draft tool" paper_link="https://drive.google.com/file/d/1cs2-1no3PySuLywzluucYTObxXyLt2TX/view?usp=sharing" tool_link="/draft_recommender" />
-                  {/* <ProjectCard title="Champion Clustering" type="Research" paper_link="https://www.google.com/?hl=es" tool_link="" /> */}
-                </div>
-              </section>
-            </div>
+            <Content champions={champions} championsByRole={championsByRole} clusterDictionary={clusterDictionary} />
           </div>
         </Suspense>
       </main>
