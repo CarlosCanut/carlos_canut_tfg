@@ -86,7 +86,7 @@ export default function Home({ champions, clusters }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex justify-center items-center min-h-screen bg-gradient-to-br from-[#000000] to-primary">
+      <main className="flex justify-center items-center min-h-screen bg-gradient-to-br from-[#000000] to-primary overflow-x-hidden">
         <Suspense fallback={<></>}>
           <div
             className={`opening-animation ${isLoading ? '' : 'loaded'}`}
@@ -106,7 +106,7 @@ export default function Home({ champions, clusters }) {
               </header>
               <section className='w-full h-[90dvh] mt-[20dvh] flex flex-col'>
                 <div className='w-full h-[20dvh] border-b-2 border-b-text flex items-end justify-start'>
-                  <h1 className='text-4xl font-bold text-text ml-[10dvw] mb-4'>
+                  <h1 className='text-lg md:text-4xl font-bold text-text ml-[10dvw] mb-4'>
                     LEAGUE OF LEGENDS MADE SIMPLE
                   </h1>
                 </div>

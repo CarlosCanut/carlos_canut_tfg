@@ -8,7 +8,7 @@ export default function ProjectCard({ title="Draft Recommender", type="Draft too
     const router = useRouter()
 
     return (
-        <div className="flex flex-row gap-4 p-4 border-2 border-text rounded-md">
+        <div className="flex flex-col sm:flex-row gap-4 p-4 border-2 border-text rounded-md">
             <div className="flex flex-col items-start justify-center">
                 <div className="text-2xl font-medium">
                     {title}
